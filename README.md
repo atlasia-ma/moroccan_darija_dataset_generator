@@ -1,4 +1,4 @@
-# Text-to-SQL with LLMs
+# Moroccan Darija Dataset Generator
 
 ## Introduction
 
