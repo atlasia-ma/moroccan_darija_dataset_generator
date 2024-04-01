@@ -1,6 +1,7 @@
 import utils.llm_utils as llm_utils
 import json
 import os
+import time
 from datasets import load_dataset
 
 
@@ -8,6 +9,8 @@ prompt_path = "./prompts/prompt_text_generation.json"
 selected_llm = "claude_3_haiku"
 extract_size = 1000
 number_of_topics = 4
+sleep_between_each_generation = True
+sleep_time = 2
 
 def build_invoke_parameters(x):
     """Build the prompt based on the generation type"""
@@ -34,5 +37,9 @@ def generate_data():
             print("content : ", content)
             with open(f"{folder_path}/result_{selected_llm}_{index}.txt", "w", encoding= "utf-8") as file:
                 file.write(content)
+        # On some LLM APIs there is a rate limit for the number of generated tokens / minute
+        # We add a sleep betweeen our generations
+        if sleep_between_each_generation :
+            time.sleep(sleep_time)
 
 generate_data()
