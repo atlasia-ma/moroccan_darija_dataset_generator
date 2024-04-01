@@ -1,4 +1,6 @@
 langchain
 langchain-community
+langchain-anthropic
 openai
+datasets
 langchain-google-genai

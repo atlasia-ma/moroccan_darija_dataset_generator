@@ -6,15 +6,6 @@ from langchain.chat_models import ChatAnyscale
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
 
-def parse_json(content) :
-    first_opening_brace = content.find('{')
-    last_closing_brace = content.rfind('}')
-    json_str = content[first_opening_brace:last_closing_brace + 1]
-    try : 
-        parsed_json = json.loads(json_str)
-        return parsed_json
-    except Exception as e:
-        print(e)
 
 def instantiate_gpt4():
     temperature = 0
