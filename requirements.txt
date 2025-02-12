@@ -4,3 +4,4 @@ langchain-anthropic
 openai
 datasets
 langchain-google-genai
+google-generativeai
