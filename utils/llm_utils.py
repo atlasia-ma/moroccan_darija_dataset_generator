@@ -53,11 +53,11 @@ def instantiate_claude_3_haiku():
     return model
 
 def instantiate_llm_studio(temperature=0.2, max_tokens=2000):
-    openai.api_base = "http://host.docker.internal:1234/v1"
+    openai.api_base = "http://127.0.0.1:1234/v1"
     model = ChatOpenAI(
         temperature=temperature,
         max_tokens=max_tokens,
-        openai_api_base = "http://host.docker.internal:1234/v1"
+        openai_api_base = "http://127.0.0.1:1234/v1"
     )
     return model
 
