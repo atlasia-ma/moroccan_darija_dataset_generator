@@ -33,7 +33,6 @@ To select an LLM, edit the `config/config.yaml` file and choose one of the suppo
 - `gemini_20_flash`
 - `gemini_pro`
 - `gpt4`
-- `mistral_7b_openorca`
 - `claude_3_opus`
 - `claude_3_sonnet`
 - `claude_3_haiku`
@@ -42,6 +41,10 @@ To select an LLM, edit the `config/config.yaml` file and choose one of the suppo
 
 ### `generate_classification_dataset.py`
 Generates a synthetic Moroccan Darija dataset for text classification. This can be used, for example, to fine-tune the **ModernBERT** model.
+
+This script was used to generate the following dataset : 
+
+https://huggingface.co/datasets/atlasia/moroccan_darija_domain_classifier_dataset
 
 #### Usage
 

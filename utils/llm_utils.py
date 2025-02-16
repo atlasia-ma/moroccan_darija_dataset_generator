@@ -3,7 +3,6 @@ import json
 import openai
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from langchain.chat_models import ChatAnyscale
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_cohere import ChatCohere
@@ -37,10 +36,6 @@ def instantiate_gemini_20_flash() :
     model = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature = temperature)
     return model
 
-def instantiate_mistral_7b_openorca():
-    temperature = 0
-    model = ChatAnyscale(model_name="Open-Orca/Mistral-7B-OpenOrca", temperature = temperature)
-    return model
 
 def instantiate_claude_3_opus():
     temperature = 0
@@ -72,7 +67,6 @@ def instantiate_llm_model(model_name):
         "gemini_20_flash" : instantiate_gemini_20_flash,
         "gemini_pro" : instantiate_gemini_pro,
         "gpt4": instantiate_gpt4,
-        "mistral_7b_openorca": instantiate_mistral_7b_openorca,
         "claude_3_opus" : instantiate_claude_3_opus,
         "claude_3_sonnet" : instantiate_claude_3_sonnet,
         "claude_3_haiku" : instantiate_claude_3_haiku,
