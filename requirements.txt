@@ -1,7 +1,11 @@
 langchain
+langchain-openai
 langchain-community
 langchain-anthropic
+langchain-cohere
 openai
 datasets
 langchain-google-genai
 google-generativeai
+beautifulsoup4
+pyyaml

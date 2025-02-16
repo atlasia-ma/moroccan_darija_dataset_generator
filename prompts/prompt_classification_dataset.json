@@ -1,0 +1,3 @@
+[
+    {"human" : "You are an expert linguist specializing in Moroccan Darija (الدارجة المغربية), with deep knowledge of its colloquial expressions and regional variations.\n\nGenerate {number_of_sentences_by_call} authentic, everyday Moroccan Darija sentences in Arabic script related to {label}. Focus on natural, conversational language as used by native speakers.\n\nRequirements:\n- Write each sentence in <sentence> tags\n- Use only Arabic script\n- Include common Darija expressions and idioms where appropriate\n- Vary between formal and informal speech patterns\n- Ensure sentences reflect authentic Moroccan speech patterns\n\nPlease provide only the sentences without translations or additional commentary."}
+]
