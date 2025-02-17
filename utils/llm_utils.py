@@ -6,7 +6,16 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_anthropic import ChatAnthropic
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_cohere import ChatCohere
+from langchain_mistralai import ChatMistralAI
 
+
+def instantiate_mistral_ai_saba():
+    model = ChatMistralAI(
+        model="mistral-saba-2502",
+        temperature=0,
+        max_retries=2,
+    )
+    return model
 
 def instantiate_gpt4():
     openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -16,7 +25,6 @@ def instantiate_gpt4():
         max_tokens=max_tokens,
         openai_api_key=openai.api_key,
     )
-    return model
     return model
 
 def instantiate_cohere(temperature=0.2, max_tokens=2000):
@@ -63,6 +71,7 @@ def instantiate_llm_studio(temperature=0.2, max_tokens=2000):
 
 def instantiate_llm_model(model_name):
     switch_dict = {
+        "mistral_saba" :instantiate_mistral_ai_saba,
         "cohere" : instantiate_cohere,
         "gemini_20_flash" : instantiate_gemini_20_flash,
         "gemini_pro" : instantiate_gemini_pro,

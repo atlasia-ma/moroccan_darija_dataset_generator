@@ -3,6 +3,7 @@ langchain-openai
 langchain-community
 langchain-anthropic
 langchain-cohere
+langchain_mistralai
 openai
 datasets
 langchain-google-genai
