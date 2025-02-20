@@ -55,9 +55,23 @@ python generate_classification_dataset.py
 ### `generate.py`
 Generates a synthetic Moroccan Darija dataset on different topics using the **Yahoo Answers Topics** dataset as a reference.
 
+### `translate_pairs.py`
+Translates sentence-transformers/all-nli dataset to Moroccan Darija using Gemini 2.0 Flash or any other supported LLM
+
+### `translate_triplet_dataset.py`
+Translates sentence-transformers/mldr dataset to Moroccan Darija using Gemini 2.0 Flash or any other supported LLM
+
 #### Usage
 ```bash
 python generate.py
+```
+
+```bash
+python translate_pairs.py
+```
+
+```bash
+python translate_triplet_dataset.py
 ```
 
 ## Contributing
