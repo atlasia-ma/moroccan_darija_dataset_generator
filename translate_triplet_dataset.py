@@ -1,8 +1,9 @@
 import utils.llm_utils as llm_utils
 from utils.config_utils import load_config, get_config
 from dotenv import load_dotenv
-from datasets import load_dataset, Dataset
-
+from datasets import load_dataset
+import os
+import json
 
 config_path = "config/config.yaml"
 config = load_config(config_path)
@@ -29,41 +30,52 @@ def generate_translation(sentence_to_translate):
         return content
 
 
+def load_translated_indices(checkpoint_file):
+    """Load translated indices from the checkpoint file."""
+    if os.path.exists(checkpoint_file):
+        with open(checkpoint_file, "r") as f:
+            return set(map(int, f.read().splitlines()))
+    return set()
+
+def reserve_indices(dataset, checkpoint_file, batch_size=3):
+    """Reserve a batch of indices by writing them to the checkpoint file before processing."""
+    translated_indices = load_translated_indices(checkpoint_file)
+    reserved_indices = []
+
+    # Find new rows to process
+    for i, row in enumerate(dataset):
+        if i not in translated_indices and len(reserved_indices) < batch_size:
+            reserved_indices.append(i)
+
+    # Write reserved indices to file before processing
+    if reserved_indices:
+        with open(checkpoint_file, "a") as f_checkpoint:
+            for index in reserved_indices:
+                f_checkpoint.write(f"{index}\n")
+
+    return reserved_indices  # Return the indices this script will process
+
 def generate_dataset():
     """Generates translation"""
     dataset = load_dataset("sentence-transformers/mldr", "en-triplet", split="train")
+    checkpoint_file = "triplet_translated_rows.txt"
+    output_dir = "translated_data"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    while True:  # Loop until no more data to process
+        reserved_indices = reserve_indices(dataset, checkpoint_file, batch_size=3)
+        if not reserved_indices:  # No more new rows to process
+            break  
 
-    # Checkpoint file
-    checkpoint_file = "translated_rows.txt"
-
-    # Load already translated indices
-    try:
-        with open(checkpoint_file, "r") as f:
-            translated_indices = set(map(int, f.read().splitlines()))
-    except FileNotFoundError:
-        translated_indices = set()
-
-    # Load existing dataset from the hub
-    repo_id = "salaheddinealabouch/mldr_moroccan_darija"
-    try:
-        existing_dataset = load_dataset(repo_id, split="train")
-        existing_data = existing_dataset.to_list()
-    except:
-        existing_data = []
-
-    # Open checkpoint file in append mode
-    with open(checkpoint_file, "a") as f_checkpoint:
         new_data = []
-        
-        for i, row in enumerate(dataset):
-            if i in translated_indices:
-                continue  # Skip already translated rows
-            
+        for i in reserved_indices:
+            row = dataset[i]
+
             # Perform translation
             translated_anchor = generate_translation(row["anchor"])
             translated_positive = generate_translation(row["positive"])
             translated_negative = generate_translation(row["negative"])
-            
+
             metadata = {
                 "anchor_en": row["anchor"],
                 "positive_en": row["positive"],
@@ -76,27 +88,10 @@ def generate_dataset():
                 "metadata": metadata
             })
 
-            # Save progress
-            f_checkpoint.write(f"{i}\n")
-            f_checkpoint.flush()  # Ensure writing to disk
-            
-            # Save data to hub every 100 rows
-            if len(new_data) >= 3:
-                merged_data = existing_data + new_data  # Append to existing data
-                new_dataset = Dataset.from_list(merged_data)
-                new_dataset.push_to_hub(repo_id)
-                
-                existing_data = merged_data  # Update existing data reference
-                new_data = []  # Reset new_data for the next chunk
-
-        # Final push if there are any remaining rows
-        if new_data:
-            merged_data = existing_data + new_data
-            new_dataset = Dataset.from_list(merged_data)
-            new_dataset.push_to_hub(repo_id)
-
-
-
+            # Save to JSON file for each reserved index
+            output_file = os.path.join(output_dir, f"translated_{i}.json")
+            with open(output_file, "w", encoding="utf-8") as f:
+                json.dump(new_data, f, ensure_ascii=False, indent=4)
 
 generate_dataset()
 
